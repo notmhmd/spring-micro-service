@@ -27,7 +27,8 @@
 		<url/>
 	</scm>
 	<properties>
-		<java.version>22</java.version>
+		<java.version>21</java.version>
+		<dockerImageName>notmhmd/bookstore-${project.artifactId}</dockerImageName>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -113,6 +114,15 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<image>
+						<name>${dockerImageName}</name>
+						<builder>dashaun/builder:tiny</builder>
+						<env>
+							<BP_JVM_VERSION>${java.version}</BP_JVM_VERSION>
+						</env>
+					</image>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -165,6 +175,15 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<configuration>
+					<url>jdbc:postgresql://localhost:15432/postgres</url>
+					<user>postgres</user>
+					<password>postgres</password>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
